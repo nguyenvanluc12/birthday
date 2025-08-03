@@ -109,16 +109,23 @@
             background: #ff0066;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            margin: 10px;
+            padding: 12px 24px;
+            border-radius: 30px;
+            margin: 15px 0;
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(255, 0, 102, 0.3);
         }
         .play-btn:hover {
             background: #e6005c;
             transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(255, 0, 102, 0.4);
+        }
+        .music-info {
+            font-size: 14px;
+            color: #99004d;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -134,7 +141,7 @@
              alt="Minh Thư xinh đẹp" class="birthday-img" title="Minh Thư sinh nhật vui vẻ!">
         
         <div class="message">
-            <p>Gửi lời chúc nhỏ đến Minh Thư !</p>
+            <p>Gửi lời chúc nhỏ đến Minh Thư </p>
             
             <p>Nhân ngày đặc biệt này, chúc bạn một sinh nhật tràn ngập niềm vui và hạnh phúc <span class="heart">❤️</span></p>
             
@@ -154,12 +161,23 @@
         </div>
         
         <!-- Nút phát nhạc -->
-        <button class="play-btn" onclick="playMusic()">🎵 Hãy bấm vào đây để nghe nhạc nào</button>
+        <button class="play-btn" onclick="playMusic()">
+            🎵 Hãy bấm vào đây để nghe nhạc nào
+        </button>
+        <div class="music-info"></div>
         
-        <!-- Nhúng nhạc từ YouTube -->
-        <iframe id="yt-player" width="0" height="0" src="https://www.youtube.com/embed/5DcKlZnmVNs?enablejsapi=1&si=TZQSXf_zwyKkD00s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <!-- Nhúng video YouTube (tối ưu không quảng cáo) -->
+        <iframe 
+            id="yt-player" 
+            width="0" 
+            height="0" 
+            src="https://www.youtube-nocookie.com/embed/5DcKlZnmVNs?rel=0&modestbranding=1&controls=0&disablekb=1&fs=0&autoplay=1&mute=1&enablejsapi=1&si=TZQSXf_zwyKkD00s" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
         
-        <p class="signature"> Happy Birthday to my best friend! <span class="heart">❤️</span></p>
+        <p class="signature">Happy Birthday to my best friend! <span class="heart">❤️</span></p>
     </div>
 
     <script>
@@ -192,11 +210,14 @@
         // Hàm phát nhạc
         function playMusic() {
             const iframe = document.getElementById('yt-player');
-            iframe.src += "&autoplay=1";
-            document.querySelector('.play-btn').style.display = 'none';
+            iframe.src = iframe.src.replace("&mute=1", "&mute=0");
+            document.querySelector('.play-btn').textContent = "🎵 Nhạc đang phát...";
+            document.querySelector('.play-btn').style.background = "#4CAF50";
             
             // Hiển thị thông báo
-            alert("Nhạc chúc mừng đang được phát! Chúc Minh Thư sinh nhật vui vẻ!");
+            setTimeout(() => {
+                alert("🎶 Nhạc chúc mừng đang được phát! Chúc Minh Thư sinh nhật vui vẻ!");
+            }, 500);
         }
         
         // Tự động thử phát nhạc khi trang load
@@ -212,9 +233,10 @@
                 this.style.transform = 'rotate(0) scale(1)';
             });
             
-            // Thử phát nhạc tự động (có thể không hoạt động trên một số trình duyệt)
+            // Thử phát nhạc tự động (tắt tiếng)
             try {
-                document.getElementById('yt-player').src += "&autoplay=1";
+                const iframe = document.getElementById('yt-player');
+                iframe.src += "&autoplay=1";
             } catch (e) {
                 console.log("Cần tương tác người dùng để phát nhạc");
             }
@@ -223,7 +245,8 @@
         // Cho phép phát nhạc khi người dùng click bất kỳ đâu trên trang
         document.addEventListener('click', function() {
             try {
-                document.getElementById('yt-player').src += "&autoplay=1";
+                const iframe = document.getElementById('yt-player');
+                iframe.src = iframe.src.replace("&mute=1", "&mute=0");
             } catch (e) {
                 console.log("Đã thử phát nhạc");
             }
